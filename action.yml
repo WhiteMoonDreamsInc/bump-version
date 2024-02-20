@@ -33,7 +33,8 @@ runs:
       git config --global user.name "${{ inputs.commit_name }}"
       git config --global user.email "${{ inputs.commit_email }}"
       git config --global pull.rebase false
-      BRANCH=${GITHUB_REF#refs/heads/}
+      # BRANCH=${GITHUB_REF#refs/heads/}
+      BRANCH=main
       pip install --no-cache-dir --user bump2version
       git remote add ${{ inputs.login }} https://${{ inputs.login }}:${{ inputs.token }}@github.com/$GITHUB_REPOSITORY
       git pull --no-edit ${{ inputs.login }} $BRANCH
