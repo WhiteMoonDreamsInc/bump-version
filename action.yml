@@ -8,6 +8,7 @@ inputs:
     required: true 
   files:
     description: List of files in which to bump the version. The format is a concatenation of paths separated by a whitespace character.
+    default: VERSION
     required: true
   commit_name:
     description: Name of the identity that is used in the commit's author signature.
@@ -33,15 +34,14 @@ runs:
       git config --global user.name "${{ inputs.commit_name }}"
       git config --global user.email "${{ inputs.commit_email }}"
       git config --global pull.rebase false
-      # BRANCH=${GITHUB_REF#refs/heads/}
-      BRANCH=main
+      BRANCH=${GITHUB_REF#refs/heads/}
       pip install --no-cache-dir --user bump2version
       git remote add ${{ inputs.login }} https://${{ inputs.login }}:${{ inputs.token }}@github.com/$GITHUB_REPOSITORY
       git pull --no-edit ${{ inputs.login }} $BRANCH
       # merge done by git pull does not update submodules changed in $BRANCH
       git submodule update --init --recursive
       git diff
-      for file in ${{ inputs.files }}; do ~/.local/bin/bumpversion --allow-dirty --current-version ${{ inputs.current_version }} ${{ inputs.part }} $file; done
+      # for file in ${{ inputs.files }}; do ~/.local/bin/bumpversion --allow-dirty --current-version ${{ inputs.current_version }} ${{ inputs.part }} $file; done
       git diff
       ~/.local/bin/bumpversion --tag --current-version ${{ inputs.current_version }} --commit --allow-dirty --commit-args="-a" ${{ inputs.part }}
       git push --tags ${{ inputs.login }} HEAD:$BRANCH
