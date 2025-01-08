@@ -41,7 +41,7 @@ runs:
       # merge done by git pull does not update submodules changed in $BRANCH
       git submodule update --init --recursive
       git diff
-      for file in ${{ inputs.files }}; do ~/.local/bin/bumpversion --allow-dirty --current-version ${{ inputs.current_version }} ${{ inputs.part }} $file; done
+      # for file in ${{ inputs.files }}; do ~/.local/bin/bumpversion --allow-dirty --current-version ${{ inputs.current_version }} ${{ inputs.part }} $file; done
       git diff
       ~/.local/bin/bumpversion --tag --current-version ${{ inputs.current_version }} --commit --allow-dirty --commit-args="-a" ${{ inputs.part }}
       git push --tags ${{ inputs.login }} HEAD:$BRANCH
